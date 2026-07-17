@@ -163,6 +163,7 @@ begin
   SetLength(Payload, ContentLength);
   if ContentLength > 0 then
     Move(FBuffer[BodyStart], Payload[1], ContentLength);
+  SetCodePage(Payload, CP_UTF8, False);
 
   BytesRemaining := Length(FBuffer) - TotalLength;
   if BytesRemaining > 0 then
