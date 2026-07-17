@@ -59,5 +59,17 @@ jobs:
       - name: Confirm compiler version
         shell: bash
         run: test "$(fpc -iV)" = "3.2.2"
+      - name: Inspect Windows FPC units
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Get-ChildItem C:\tools\freepascal -Filter fpc.cfg -Recurse |
+            ForEach-Object { Write-Output "CONFIG=$($_.FullName)"; Get-Content $_.FullName }
+          $jsonUnits = Get-ChildItem C:\tools\freepascal -Filter fpjson.ppu -Recurse
+          if ($jsonUnits) {
+            $jsonUnits | ForEach-Object { Write-Output "FPJSON=$($_.FullName)" }
+          } else {
+            Write-Output 'FPJSON=NOT_INSTALLED'
+          }
       - name: Build and test
         run: python tools/pascal_checks.py
