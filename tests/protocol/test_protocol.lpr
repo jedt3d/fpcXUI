@@ -33,7 +33,7 @@ end;
 procedure FeedString(Reader: TLspFrameReader; const Value: RawByteString);
 begin
   if Length(Value) > 0 then
-    Reader.Feed(Value[1], Length(Value));
+    Reader.Feed(@Value[1], Length(Value));
 end;
 
 procedure ExpectTransportError(const Frame, Context: RawByteString);
@@ -72,7 +72,7 @@ begin
     FrameReady := False;
     for I := 1 to Length(Frame) do
     begin
-      Reader.Feed(Frame[I], 1);
+      Reader.Feed(@Frame[I], 1);
       if Reader.TryReadFrame(Decoded) then
       begin
         Check(I = Length(Frame), 'fragmented frame completed too early');

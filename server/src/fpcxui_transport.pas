@@ -21,7 +21,7 @@ type
     function FindHeaderEnd: SizeInt;
     function ParseContentLength(const Header: RawByteString): SizeInt;
   public
-    procedure Feed(const Data; Count: SizeInt);
+    procedure Feed(Data: Pointer; Count: SizeInt);
     function TryReadFrame(out Payload: RawByteString): Boolean;
     function HasPendingData: Boolean;
   end;
@@ -36,7 +36,7 @@ begin
   Result := (Value >= '0') and (Value <= '9');
 end;
 
-procedure TLspFrameReader.Feed(const Data; Count: SizeInt);
+procedure TLspFrameReader.Feed(Data: Pointer; Count: SizeInt);
 var
   OldLength: SizeInt;
 begin
@@ -44,10 +44,12 @@ begin
     raise ELspTransportError.Create('Cannot append a negative byte count');
   if Count = 0 then
     Exit;
+  if Data = nil then
+    raise ELspTransportError.Create('Cannot append bytes from a nil pointer');
 
   OldLength := Length(FBuffer);
   SetLength(FBuffer, OldLength + Count);
-  Move(Data, FBuffer[OldLength], Count);
+  Move(Data^, FBuffer[OldLength], Count);
 end;
 
 function TLspFrameReader.FindHeaderEnd: SizeInt;
