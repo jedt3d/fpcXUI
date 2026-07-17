@@ -49,8 +49,11 @@ jobs:
         shell: pwsh
         run: |
           choco install freepascal --version=3.2.2 -y --no-progress
-          $compiler = Get-ChildItem C:\tools\freepascal -Filter fpc.exe -Recurse |
-            Select-Object -First 1
+          $compiler = Get-Item C:\tools\freepascal\bin\x86_64-win64\fpc.exe -ErrorAction SilentlyContinue
+          if (-not $compiler) {
+            $compiler = Get-ChildItem C:\tools\freepascal -Filter fpc.exe -Recurse |
+              Select-Object -First 1
+          }
           if (-not $compiler) { throw 'FPC executable was not installed' }
           $compiler.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Append
       - name: Confirm compiler version
