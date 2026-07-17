@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-07-17T07:25:00+07:00",
+  "host": {
+    "os": "macOS 26.5.2",
+    "architecture": "arm64",
+    "note": "Local Phase 0 development host; results are not portable performance claims."
+  },
+  "fpcXui": {
+    "fpc": "3.2.2",
+    "node": "26.0.0",
+    "npm": "11.12.1",
+    "typescript": "5.9.3",
+    "vscode": {
+      "version": "1.128.1",
+      "commit": "5264f2156cbcd7aea5fd004d29eaa10209155d66",
+      "architecture": "arm64"
+    },
+    "lspClient": "vscode-languageclient 9.0.1",
+    "lspProtocol": "3.17.5"
+  },
+  "kotlinComparison": {
+    "ide": "IntelliJ IDEA Community source 2025.3",
+    "build": "idea/253.28294.334",
+    "kotlinPluginCompatibilityPin": "253.28294.325-IJ",
+    "sourcePolicy": "Build the comparison host and Community Kotlin plugin from open-source revisions; do not introduce the unified proprietary IDE binary as a project dependency.",
+    "status": "pinned-not-measured",
+    "reason": "Phase 0 has no completion, navigation, diagnostics, or refactoring implementation to compare fairly. The first end-to-end matched-workload run is gated on those Phase 1 feature probes."
+  },
+  "budgets": {
+    "coldActivationP95Milliseconds": 750,
+    "warmCompletionP95Milliseconds": 100,
+    "hoverDefinitionP95Milliseconds": 100,
+    "syntaxDiagnosticsP95Milliseconds": 150,
+    "semanticDiagnosticsP95Milliseconds": 750,
+    "serverIdleRssMiB": 150,
+    "extensionHostRssDeltaMiB": 25
+  }
+}

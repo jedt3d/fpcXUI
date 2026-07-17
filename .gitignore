@@ -1,0 +1,16 @@
+.DS_Store
+.phase0/
+
+extension/node_modules/
+extension/out/
+extension/.vscode-test/
+
+server/build/
+tests/**/build/
+
+__pycache__/
+*.pyc
+
+*.o
+*.ppu
+*.rst

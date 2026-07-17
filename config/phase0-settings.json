@@ -1,0 +1,8 @@
+{
+  "update.mode": "none",
+  "extensions.autoUpdate": "off",
+  "extensions.autoCheckUpdates": false,
+  "telemetry.telemetryLevel": "off",
+  "workbench.enableExperiments": false,
+  "chat.disableAIFeatures": true
+}

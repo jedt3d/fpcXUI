@@ -1,0 +1,75 @@
+{
+  "name": "fpc-xui",
+  "displayName": "FPC XUI",
+  "description": "Modern FreePascal language support backed by a native language server.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "fpc-xui",
+  "engines": {
+    "vscode": "^1.128.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onLanguage:freepascal"
+  ],
+  "main": "./out/src/extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "The bundled language server can run, but a custom server path is disabled until the workspace is trusted.",
+      "restrictedConfigurations": [
+        "fpcXui.server.path"
+      ]
+    }
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "freepascal",
+        "aliases": [
+          "FreePascal",
+          "Object Pascal",
+          "Pascal"
+        ],
+        "extensions": [
+          ".pas",
+          ".pp",
+          ".inc",
+          ".lpr"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "configuration": {
+      "title": "FPC XUI",
+      "properties": {
+        "fpcXui.server.path": {
+          "type": "string",
+          "default": "",
+          "scope": "machine-overridable",
+          "markdownDescription": "Absolute path to an FPC XUI language-server executable. Leave empty to use the repository development binary or the packaged platform binary."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p .",
+    "check": "tsc -p . --noEmit",
+    "pretest": "npm run compile",
+    "test": "node --test out/test/serverPath.test.js"
+  },
+  "dependencies": {
+    "vscode-languageclient": "9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "@types/vscode": "1.125.0",
+    "typescript": "5.9.3"
+  }
+}
