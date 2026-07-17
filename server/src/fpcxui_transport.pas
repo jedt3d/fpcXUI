@@ -21,7 +21,7 @@ type
     function FindHeaderEnd: SizeInt;
     function ParseContentLength(const Header: RawByteString): SizeInt;
   public
-    procedure Feed(Data: Pointer; Count: SizeInt);
+    procedure Feed(const Data; Count: SizeInt);
     function TryReadFrame(out Payload: RawByteString): Boolean;
     function HasPendingData: Boolean;
   end;
@@ -36,7 +36,7 @@ begin
   Result := (Value >= '0') and (Value <= '9');
 end;
 
-procedure TLspFrameReader.Feed(Data: Pointer; Count: SizeInt);
+procedure TLspFrameReader.Feed(const Data; Count: SizeInt);
 var
   OldLength: SizeInt;
 begin
@@ -44,12 +44,10 @@ begin
     raise ELspTransportError.Create('Cannot append a negative byte count');
   if Count = 0 then
     Exit;
-  if Data = nil then
-    raise ELspTransportError.Create('Cannot append bytes from a nil pointer');
 
   OldLength := Length(FBuffer);
   SetLength(FBuffer, OldLength + Count);
-  Move(Data^, FBuffer[OldLength], Count);
+  Move(Data, FBuffer[OldLength], Count);
 end;
 
 function TLspFrameReader.FindHeaderEnd: SizeInt;
@@ -179,9 +177,16 @@ begin
 end;
 
 function BuildLspFrame(const Payload: RawByteString): RawByteString;
+var
+  Header: RawByteString;
 begin
-  Result := 'Content-Length: ' + RawByteString(IntToStr(Length(Payload))) +
-    #13#10#13#10 + Payload;
+  Header := 'Content-Length: ' + RawByteString(IntToStr(Length(Payload))) +
+    #13#10#13#10;
+  SetLength(Result, Length(Header) + Length(Payload));
+  if Length(Header) > 0 then
+    Move(Header[1], Result[1], Length(Header));
+  if Length(Payload) > 0 then
+    Move(Payload[1], Result[Length(Header) + 1], Length(Payload));
 end;
 
 procedure WriteLspFrame(Stream: TStream; const Payload: RawByteString);

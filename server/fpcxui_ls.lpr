@@ -29,7 +29,7 @@ begin
       if BytesRead = 0 then
         Break;
 
-      Reader.Feed(@ReadBuffer[0], BytesRead);
+      Reader.Feed(ReadBuffer, BytesRead);
       while Reader.TryReadFrame(Payload) do
       begin
         if Dispatcher.HandleMessage(Payload, Response) then
