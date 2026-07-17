@@ -4,7 +4,7 @@
 
 **Local status:** Complete on macOS arm64
 
-**Cross-platform status:** CI matrix defined; remote runners not executed
+**Cross-platform status:** Complete on Ubuntu, macOS, and Windows CI
 
 **Kotlin parity status:** Open-source comparison revisions pinned; feature
 comparison intentionally not measured before equivalent features exist
@@ -54,9 +54,13 @@ It passed all of the following:
   16.06 MiB/s. The three-trial feasibility medians are 22.48 and
   16.49 MiB/s respectively; these are not parity claims.
 
-The workflow in `.github/workflows/phase0.yml` defines Ubuntu, macOS, and
-Windows Pascal jobs plus the TypeScript job. There is no remote workflow result
-yet, so Windows/Linux behavior is not claimed as verified.
+The [successful Phase 0 workflow run](https://github.com/jedt3d/fpcXUI/actions/runs/29546115367)
+passed the TypeScript client and the complete Pascal build/test harness on
+Ubuntu, macOS, and Windows. The Windows runner also exposed and retired two
+cross-platform defects before the green run: Chocolatey's FPC package omitted
+`fpc.cfg`, requiring an explicit wildcard unit search path, and string
+concatenation could transcode UTF-8 LSP payload bytes while retaining the
+original `Content-Length`.
 
 ## Isolation incident
 
@@ -132,7 +136,6 @@ symbol index, and type system.
 
 ## Explicitly deferred
 
-- Actual Windows/Linux runner evidence.
 - Full Kotlin/IntelliJ comparative measurements; the matching feature set does
   not exist yet.
 - Complete Pascal grammar, directive evaluation, green/red incremental tree,
