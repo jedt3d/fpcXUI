@@ -64,12 +64,16 @@ def run_checked(command: list[str]) -> str:
     completed = subprocess.run(
         command,
         cwd=ROOT,
-        check=True,
+        check=False,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
     sys.stdout.write(completed.stdout)
+    if completed.returncode != 0:
+        raise RuntimeError(
+            f"{command[0]} exited {completed.returncode}; see test output above"
+        )
     return completed.stdout
 
 
