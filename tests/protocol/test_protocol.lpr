@@ -79,7 +79,9 @@ begin
         FrameReady := True;
       end;
     end;
-    Check(FrameReady, 'fragmented frame was not emitted');
+    Check(FrameReady, Format(
+      'fragmented frame was not emitted: frame_length=%d payload_length=%d frame_hex=%s',
+      [Length(Frame), Length(Payload), ByteHex(Frame)]));
     Check(Decoded = Payload, 'UTF-8 payload changed during framing');
     Check(not Reader.HasPendingData, 'fragmented frame left buffered bytes');
   finally
