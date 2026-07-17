@@ -49,27 +49,16 @@ jobs:
         shell: pwsh
         run: |
           choco install freepascal --version=3.2.2 -y --no-progress
-          $compiler = Get-Item C:\tools\freepascal\bin\x86_64-win64\fpc.exe -ErrorAction SilentlyContinue
-          if (-not $compiler) {
-            $compiler = Get-ChildItem C:\tools\freepascal -Filter fpc.exe -Recurse |
-              Select-Object -First 1
+          $compiler = Get-Item C:\tools\freepascal\bin\i386-win32\fpc.exe
+          $unitRoot = 'C:\tools\freepascal\units\i386-win32'
+          if (-not (Test-Path "$unitRoot\fcl-json\fpjson.ppu")) {
+            throw 'FPC JSON units were not installed'
           }
-          if (-not $compiler) { throw 'FPC executable was not installed' }
           $compiler.DirectoryName | Out-File -FilePath $env:GITHUB_PATH -Append
+          "FPCXUI_FPC_UNIT_PATHS=$unitRoot;$unitRoot\*" |
+            Out-File -FilePath $env:GITHUB_ENV -Append
       - name: Confirm compiler version
         shell: bash
         run: test "$(fpc -iV)" = "3.2.2"
-      - name: Inspect Windows FPC units
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          Get-ChildItem C:\tools\freepascal -Filter fpc.cfg -Recurse |
-            ForEach-Object { Write-Output "CONFIG=$($_.FullName)"; Get-Content $_.FullName }
-          $jsonUnits = Get-ChildItem C:\tools\freepascal -Filter fpjson.ppu -Recurse
-          if ($jsonUnits) {
-            $jsonUnits | ForEach-Object { Write-Output "FPJSON=$($_.FullName)" }
-          } else {
-            Write-Output 'FPJSON=NOT_INSTALLED'
-          }
       - name: Build and test
         run: python tools/pascal_checks.py

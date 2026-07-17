@@ -14,6 +14,11 @@ import sys
 ROOT = Path(__file__).resolve().parent.parent
 BUILD_ROOT = ROOT / ".phase0" / "build" / "pascal-checks"
 FPC = os.environ.get("FPCXUI_FPC", "fpc")
+EXTRA_UNIT_PATHS = [
+    Path(entry)
+    for entry in os.environ.get("FPCXUI_FPC_UNIT_PATHS", "").split(os.pathsep)
+    if entry
+]
 
 
 def target_name() -> tuple[str, str]:
@@ -42,6 +47,7 @@ def compile_program(source: Path, name: str, unit_paths: list[Path]) -> Path:
         "-O1",
         "-g",
         "-gl",
+        *(f"-Fu{path}" for path in EXTRA_UNIT_PATHS),
         *(f"-Fu{path}" for path in unit_paths),
         f"-FU{unit_dir}",
         f"-FE{BUILD_ROOT}",
